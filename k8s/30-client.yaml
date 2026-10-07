@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: client, namespace: secureshare }
+spec:
+  replicas: 2
+  selector: { matchLabels: { app: client } }
+  template:
+    metadata: { labels: { app: client } }
+    spec:
+      containers:
+        - name: client
+          image: YOUR_DOCKERHUB_USER/secureshare-client:latest   # replaced by Jenkins
+          ports: [{ containerPort: 80 }]
+          readinessProbe:
+            httpGet: { path: /, port: 80 }
+          resources:
+            requests: { cpu: 50m, memory: 32Mi }
+            limits: { cpu: 200m, memory: 128Mi }
+---
+apiVersion: v1
+kind: Service
+metadata: { name: client, namespace: secureshare }
+spec:
+  type: NodePort          # reachable on minikube/kind/Docker Desktop; use the Ingress below for a domain
+  selector: { app: client }
+  ports: [{ port: 80, targetPort: 80, nodePort: 30080 }]
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: secureshare
+  namespace: secureshare
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: 60m
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: secureshare.local
+      http:
+        paths:
+          - { path: /, pathType: Prefix, backend: { service: { name: client, port: { number: 80 } } } }

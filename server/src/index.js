@@ -21,6 +21,7 @@ const app = express();
 app.use(cors({ origin: process.env.CLIENT_URL || true }));
 app.use(express.json());
 
+app.get('/api/health', (req, res) => res.json({ ok: true }));
 app.use('/api/auth', authRoutes);
 app.use('/api/files', fileRoutes);
 app.use('/api/shares', shareRoutes);
