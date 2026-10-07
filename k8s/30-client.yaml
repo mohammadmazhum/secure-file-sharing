@@ -9,7 +9,7 @@ spec:
     spec:
       containers:
         - name: client
-          image: YOUR_DOCKERHUB_USER/secureshare-client:latest   # replaced by Jenkins
+          image: mazhum/secureshare-client:latest   # replaced by Jenkins
           ports: [{ containerPort: 80 }]
           readinessProbe:
             httpGet: { path: /, port: 80 }

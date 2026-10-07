@@ -2,7 +2,7 @@ pipeline {
   agent any
 
   environment {
-    REGISTRY   = 'YOUR_DOCKERHUB_USER'          // Docker Hub username
+    REGISTRY   = 'mazhum'          // Docker Hub username
     SERVER_IMG = "${REGISTRY}/secureshare-server"
     CLIENT_IMG = "${REGISTRY}/secureshare-client"
     TAG        = "${env.BUILD_NUMBER}"
@@ -59,7 +59,7 @@ pipeline {
       steps {
         withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
           sh '''
-            sed -i "s|YOUR_DOCKERHUB_USER|${REGISTRY}|g" k8s/*.yaml
+            sed -i "s|mazhum|${REGISTRY}|g" k8s/*.yaml
             kubectl apply -f k8s/
             kubectl -n secureshare set image deployment/server server=${SERVER_IMG}:${TAG}
             kubectl -n secureshare set image deployment/client client=${CLIENT_IMG}:${TAG}

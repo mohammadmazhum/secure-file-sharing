@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: server
-          image: YOUR_DOCKERHUB_USER/secureshare-server:latest   # replaced by Jenkins
+          image: mazhum/secureshare-server:latest   # replaced by Jenkins
           ports: [{ containerPort: 5000 }]
           envFrom:
             - configMapRef: { name: secureshare-config }
