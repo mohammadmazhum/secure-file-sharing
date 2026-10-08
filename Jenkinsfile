@@ -73,7 +73,7 @@ pipeline {
 
   post {
     always  { sh 'docker logout || true' }
-    success { echo 'Deployed build ${TAG}' }
+    success { echo "Deployed build ${TAG}" }
     failure { echo 'Pipeline failed, check the stage logs above' }
   }
 }
